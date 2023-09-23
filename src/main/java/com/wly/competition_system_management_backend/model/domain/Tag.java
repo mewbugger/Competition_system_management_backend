@@ -1,11 +1,13 @@
 package com.wly.competition_system_management_backend.model.domain;
 
 import lombok.Data;
+import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@Alias("tag")
 public class Tag implements Serializable {
 
 
@@ -45,6 +47,6 @@ public class Tag implements Serializable {
     /**
      * 是否删除
      */
-    private Byte isDelete;
+    private Integer isDelete;
 
 }

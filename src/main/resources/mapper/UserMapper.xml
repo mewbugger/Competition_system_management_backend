@@ -5,7 +5,7 @@
 
 <mapper namespace="com.wly.competition_system_management_backend.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.wly.competition_system_management_backend.model.domain.User">
+    <resultMap id="UserMap" type="com.wly.competition_system_management_backend.model.domain.User">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="userName" column="userName" jdbcType="VARCHAR"/>
         <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
@@ -21,13 +21,48 @@
         <result property="userRole" column="userRole" jdbcType="INTEGER"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,userName,userAccount,
-        avatarUrl,gender,userPassword,
-        phone,email,userStatus,
-        createTime,updateTime,isDelete,
-        userRole
-    </sql>
+
+    <select id="listAllUser" resultMap="UserMap">
+        select id, userName, userAccount, avatarUrl, gender, userPassword, phone, email, userStatus, createTime,
+               updateTime, userRole from user where isDelete = 0
+    </select>
+
+    <update id="deleteUserById" >
+        update
+            user
+        set
+            isDelete = 1
+        where
+            id = #{id}
+    </update>
+
+    <select id="queryOneUser" parameterType="userQuery" resultType="user">
+        select id, userName, userAccount, avatarUrl, gender, userPassword, phone, email, userStatus, createTime,
+               updateTime, userRole
+        from user
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="userName != null">
+                AND userName = #{userName}
+            </if>
+            <if test="userAccount != null">
+                AND userAccount = #{userAccount}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="phone != null">
+                AND phone = #{phone}
+            </if>
+            <if test="email != null">
+                AND email = #{email}
+            </if>
+                AND isDelete != 1
+        </where>
+
+    </select>
 
 
 </mapper>

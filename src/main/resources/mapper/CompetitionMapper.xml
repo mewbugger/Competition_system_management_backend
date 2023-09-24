@@ -18,5 +18,55 @@
         select id, name, level, createTime, updateTime, expireTime from competition where isDelete = 0
     </select>
 
+    <update id="deleteCompetitionById" >
+        update
+            competition
+        set
+            isDelete = 1
+        where
+            id = #{id} AND isDelete = 0
+    </update>
+
+    <update id="updateCompetitionById" parameterType="competitionUpdateRequest">
+        update
+            competition
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="expireTime != null">
+                expireTime = #{expireTime}
+            </if>
+        </set>
+        where
+            id = #{id} AND isDelete != 1
+    </update>
+
+    <select id="queryOneCompetition" parameterType="competitionQuery" resultType="competition">
+        select id, name, level, createTime, updateTime, expireTime
+        from competition
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="level != null">
+                AND level = #{level}
+            </if>
+            <if test="expireTime != null">
+                AND expireTime = #{expireTime}
+            </if>
+            AND isDelete != 1
+        </where>
+
+    </select>
+
+
+
 
 </mapper>

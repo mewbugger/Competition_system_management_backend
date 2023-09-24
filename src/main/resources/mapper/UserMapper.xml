@@ -33,7 +33,31 @@
         set
             isDelete = 1
         where
-            id = #{id}
+            id = #{id} AND isDelete = 0
+    </update>
+
+    <update id="updateUserById" parameterType="userUpdateRequest">
+        update
+            user
+        <set>
+            <if test="userName != null">
+                userName = #{userName},
+            </if>
+            <if test="userAccount != null">
+                userAccount = #{userAccount},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+        </set>
+        where
+            id = #{id} AND isDelete != 1
     </update>
 
     <select id="queryOneUser" parameterType="userQuery" resultType="user">
@@ -44,25 +68,27 @@
             <if test="id != null">
                 AND id = #{id}
             </if>
-            <if test="userName != null">
+            <if test="userName != null ">
                 AND userName = #{userName}
             </if>
-            <if test="userAccount != null">
+            <if test="userAccount != null ">
                 AND userAccount = #{userAccount}
             </if>
             <if test="gender != null">
                 AND gender = #{gender}
             </if>
-            <if test="phone != null">
+            <if test="phone != null ">
                 AND phone = #{phone}
             </if>
-            <if test="email != null">
+            <if test="email != null ">
                 AND email = #{email}
             </if>
                 AND isDelete != 1
         </where>
 
     </select>
+
+
 
 
 </mapper>

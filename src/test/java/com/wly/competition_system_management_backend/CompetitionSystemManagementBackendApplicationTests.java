@@ -1,10 +1,13 @@
 package com.wly.competition_system_management_backend;
 
-import com.wly.competition_system_management_backend.common.BaseResponse;
 import com.wly.competition_system_management_backend.model.domain.Competition;
 import com.wly.competition_system_management_backend.model.domain.Team;
 import com.wly.competition_system_management_backend.model.domain.User;
+import com.wly.competition_system_management_backend.model.query.CompetitionQuery;
+import com.wly.competition_system_management_backend.model.query.TeamQuery;
 import com.wly.competition_system_management_backend.model.query.UserQuery;
+import com.wly.competition_system_management_backend.model.request.CompetitionUpdateRequest;
+import com.wly.competition_system_management_backend.model.request.UserUpdateRequest;
 import com.wly.competition_system_management_backend.service.CompetitionService;
 import com.wly.competition_system_management_backend.service.TeamService;
 import com.wly.competition_system_management_backend.service.UserService;
@@ -14,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.annotation.Resource;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(classes = CompetitionSystemManagementBackendApplication.class)
 public class CompetitionSystemManagementBackendApplicationTests {
 
     @Resource
@@ -50,28 +53,84 @@ public class CompetitionSystemManagementBackendApplicationTests {
 
     @Test
     void testUserForListByPage() {
-        BaseResponse<List<User>> listBaseResponse = userService.listAllUserByPage(2, 2);
-        System.out.println(listBaseResponse);
+        List<User> users = userService.listAllUserByPage(1, 2);
+        System.out.println(users);
     }
 
     @Test
     void testQueryOneUser() {
         UserQuery userQuery = new UserQuery();
-        userQuery.setId(3L);
-        BaseResponse<User> result = userService.queryOneUser(userQuery);
-        System.out.println(result);
-        System.out.println(result.getData());
-        System.out.println(result.getMessage());
-
+        userQuery.setUserName("健身战士");
+        User user = userService.queryOneUser(userQuery);
+        System.out.println(user);
     }
 
     @Test
     void testDeleteUserById() {
-        BaseResponse<Integer> result = userService.deleteUserById(2L);
+        Integer result = userService.deleteUserById(3L);
         System.out.println(result);
-        System.out.println(result.getData());
-        System.out.println(result.getMessage());
     }
+
+    @Test
+    void testDeleteTeamById() {
+        Integer result = teamService.deleteTeamById(3L);
+        System.out.println(result);
+    }
+
+    @Test
+    void testQueryOneTeam(){
+        TeamQuery teamQuery = new TeamQuery();
+        teamQuery.setName("自动驾驶队");
+        Team team = teamService.queryOneTeam(teamQuery);
+        System.out.println(team);
+    }
+
+    @Test
+    void testDeleteCompetitionById() {
+        Integer result = competitionService.deleteCompetitionById(1L);
+        System.out.println(result);
+    }
+
+    @Test
+    void testQueryOneCompetition(){
+        CompetitionQuery competitionQuery = new CompetitionQuery();
+        competitionQuery.setLevel("省级");
+        Competition competition = competitionService.queryOneCompetition(competitionQuery);
+        System.out.println(competition);
+    }
+
+    @Test
+    void testUpdateUserById(){
+        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
+        userUpdateRequest.setId(1L);
+        userUpdateRequest.setUserName("健身战士");
+        Integer result = userService.updateUserById(userUpdateRequest);
+        System.out.println(result);
+        UserQuery userQuery = new UserQuery();
+        userQuery.setId(userUpdateRequest.getId());
+        User user = userService.queryOneUser(userQuery);
+        System.out.println("================");
+        System.out.println("更新后的用户是");
+        System.out.println(user);
+    }
+
+    @Test
+    void testUpdateCompetitionById() {
+        CompetitionUpdateRequest competitionUpdateRequest = new CompetitionUpdateRequest();
+        competitionUpdateRequest.setId(1L);
+        competitionUpdateRequest.setName("Kaggle");
+        Integer result = competitionService.updateCompetitionById(competitionUpdateRequest);
+        System.out.println(result);
+        CompetitionQuery competitionQuery = new CompetitionQuery();
+        competitionQuery.setId(competitionUpdateRequest.getId());
+        Competition competition = competitionService.queryOneCompetition(competitionQuery);
+        System.out.println("================");
+        System.out.println("更新后的竞赛是");
+        System.out.println(competition);
+    }
+
+
+
 
 
 
